@@ -161,7 +161,10 @@ print(response.content, "  (model:", response.model, " latency:", response.laten
 ```
 deeprak/
 ├── delegate/                      Tier-aware model routing (the core)
-└── rag/                           Local Markdown retrieval (no vector DB)
+├── rag/                           Local Markdown retrieval (no vector DB)
+├── enhance.py                     Vague pentest prompt -> structured plan
+├── orchestrator.py                Sequential Workflow runner (typed Steps)
+└── audit.py                       Append-only JSONL log with SHA-256 hash chain
 
 examples/
 ├── chatbot/                       FastAPI + SSE reference chatbot

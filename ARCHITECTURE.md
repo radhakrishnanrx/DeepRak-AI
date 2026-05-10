@@ -17,9 +17,9 @@ This document is intentionally short. The detailed reasoning lives in `docs/desi
 
 ---
 
-## Modules (v0.1)
+## Modules (v0.2)
 
-| Module | Status in v0.1 | What it does |
+| Module | Status | What it does |
 |---|---|---|
 | `deeprak.delegate` | ✅ Implemented | Tier-aware model routing across SMALL / STANDARD / PREMIUM. OpenAI-compat HTTP adapter (configurable path for non-canonical providers like Gemini direct). Multi-model fallback. Sync + async. |
 | `deeprak.rag` | ✅ Implemented | Heading-aware Markdown chunker + grep-based retrieval with frontmatter filters. No vector DB. |
@@ -30,7 +30,7 @@ This document is intentionally short. The detailed reasoning lives in `docs/desi
 | `deeprak.memory` | 🚧 Planned (v0.3) | Append-only Markdown + JSON memory store. |
 | `deeprak.policy` | 🚧 Planned (v0.3) | Composable gate decorators (operator approval, scope, rate limit). |
 
-The v0.2 modules ship as typed interfaces in v0.1; their implementations land alongside their tests in v0.2.
+The v0.3 modules above are typed-interface placeholders in v0.2; their implementations land in v0.3.
 
 ---
 
@@ -55,8 +55,8 @@ These are documented in the ADRs, not omitted by accident:
 - No web UI in the runtime ([ADR-002](docs/design-decisions/ADR-002-no-ui.md)). A reference chatbot lives in `examples/`, not in `deeprak/` ([ADR-005](docs/design-decisions/ADR-005-chat-ui-as-example-not-core.md)).
 - No vector database ([ADR-001](docs/design-decisions/ADR-001-no-vector-db.md), [ADR-004](docs/design-decisions/ADR-004-grep-over-embeddings-at-small-scale.md)).
 - No bundled model gateway — DeepRak speaks the OpenAI-compatible protocol; you bring the gateway ([ADR-003](docs/design-decisions/ADR-003-litellm-as-gateway.md)).
-- No multi-agent topologies in v0.1.
-- No PyPI publish in v0.1 — install from git.
+- No multi-agent topologies in v0.2.
+- No PyPI publish in v0.2 — install from git.
 
 ---
 

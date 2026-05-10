@@ -11,4 +11,4 @@ See ARCHITECTURE.md for system design and ADR-001..005 for the load-bearing
 decisions. SPDX-License-Identifier: MIT
 """
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"

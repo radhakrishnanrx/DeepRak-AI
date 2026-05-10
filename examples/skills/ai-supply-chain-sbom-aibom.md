@@ -17,7 +17,7 @@ Inventory the AI components of a system (models, datasets, prompts, agent tools,
 ## Pre-Audit Gates
 
 1. Source-of-truth manifests located (Python `pyproject.toml`, Node `package.json`, container `Dockerfile`).
-2. Output format chosen — CycloneDX 1.6 JSON is the v0.1 default; SPDX 2.3 only on explicit external requirement.
+2. Output format chosen — CycloneDX 1.6 JSON as the default; SPDX 2.3 only on explicit external requirement.
 3. Signing-key strategy confirmed — Sigstore keyless via OIDC is recommended; long-lived keys require HSM/secret-manager custody.
 4. Retention policy agreed — typically 3+ years for compliance deliverables.
 

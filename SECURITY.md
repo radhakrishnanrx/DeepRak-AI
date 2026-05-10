@@ -64,7 +64,7 @@ Use this skill as the entry point when threat-modeling any agentic deployment bu
 
 ## Alignment with public AI security frameworks
 
-If you are building an autonomous-agent system that needs to align with public AI-security frameworks — NIST AI RMF, MITRE ATLAS, ENISA AI Threat Landscape — DeepRak provides v0.1 primitives that map onto common control areas:
+If you are building an autonomous-agent system that needs to align with public AI-security frameworks — NIST AI RMF, MITRE ATLAS, ENISA AI Threat Landscape — DeepRak provides v0.2 primitives that map onto common control areas:
 
 | Control area | DeepRak primitive |
 |---|---|

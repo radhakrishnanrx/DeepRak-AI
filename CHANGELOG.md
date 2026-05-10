@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-05-10
+
+### Fixed (documentation drift only)
+- README "Project shape" now lists `enhance.py`, `orchestrator.py`, and `audit.py` (the new v0.2.0 modules were absent from the layout block).
+- ARCHITECTURE.md heading and labels updated v0.1 → v0.2 in 5 places where they had drifted; the "v0.3 modules above are typed-interface placeholders" sentence corrected.
+- SECURITY.md: "DeepRak provides v0.1 primitives" → v0.2.
+- `examples/skills/ai-supply-chain-sbom-aibom.md`: dropped a stale "v0.1 default" reference.
+
+No code changes. v0.2.0 / v0.2.1 source-compatible.
+
 ## [0.2.1] — 2026-05-10
 
 ### Added

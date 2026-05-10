@@ -5,8 +5,7 @@ Tier definitions and per-tier model configuration for the delegation subsystem.
 from enum import IntEnum
 from typing import Final
 
-from pydantic import BaseModel
-from pydantic import field_validator
+from pydantic import BaseModel, field_validator
 
 
 class ModelTier(IntEnum):

@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-05-10
+
+### Fixed
+- `ruff check` clean: removed 13 lint findings (unused imports, control-flow simplifications, deferred-import patterns) so CI passes on the lint job.
+- `ruff format` clean: reformatted `deeprak/delegate/classifier.py` and `deeprak/delegate/router.py`.
+- `mypy --strict` clean: `usage` dict in `_extract_response_fields` retyped to `dict[str, Any]` so `int(usage.get(...))` type-checks. Added missing `Any` import.
+
+### Changed
+- `TaskType` migrated from `(str, Enum)` to `StrEnum` (Python 3.11+). Behavior preserved: each member is still a `str` instance and `.value` returns the lowercase name.
+- `RAGFilter.matches()` simplified to `return self._check_frontmatter_match(chunk)` for the final criterion.
+
+### Notes
+- No public API behavior changes. v0.1.0 callers are source-compatible.
+
 ## [0.1.0] — 2026-05-10
 
 ### Added

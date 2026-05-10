@@ -3,13 +3,13 @@ Prompt-based task classification for the delegation subsystem.
 """
 
 import re
-from enum import Enum
+from enum import StrEnum
 from typing import Final
 
 from deeprak.delegate.tiers import ModelTier
 
 
-class TaskType(str, Enum):
+class TaskType(StrEnum):
     """
     Canonical task categories understood by the delegation subsystem.
 
@@ -103,8 +103,7 @@ class TaskClassifier:
         if keyword_overrides:
             merged.update(keyword_overrides)
         self._patterns: list[tuple[re.Pattern[str], TaskType]] = [
-            (re.compile(rf"\b{re.escape(kw)}\b"), task_type)
-            for kw, task_type in merged.items()
+            (re.compile(rf"\b{re.escape(kw)}\b"), task_type) for kw, task_type in merged.items()
         ]
 
     def classify(self, prompt: str) -> TaskType:

@@ -1,6 +1,6 @@
 [project]
 name = "deeprak"
-version = "0.1.0"
+version = "0.1.1"
 description = "AI-native orchestration runtime: model delegation, local RAG, context compression, workflow execution."
 readme = "README.md"
 requires-python = ">=3.11"

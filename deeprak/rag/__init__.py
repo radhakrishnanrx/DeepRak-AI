@@ -14,11 +14,9 @@ MarkdownChunker - heading-aware splitter for Markdown text
 Chunk           - a single heading-delimited section of a Markdown file
 """
 
-from deeprak.rag.chunker import Chunk
-from deeprak.rag.chunker import MarkdownChunker
+from deeprak.rag.chunker import Chunk, MarkdownChunker
 from deeprak.rag.filters import RAGFilter
-from deeprak.rag.grep_rag import GrepRAG
-from deeprak.rag.grep_rag import RAGMatch
+from deeprak.rag.grep_rag import GrepRAG, RAGMatch
 
 __all__: list[str] = [
     "Chunk",

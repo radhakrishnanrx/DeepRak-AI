@@ -4,4 +4,4 @@ See ARCHITECTURE.md for system design and extension points.
 SPDX-License-Identifier: MIT
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

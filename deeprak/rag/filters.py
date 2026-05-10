@@ -36,7 +36,7 @@ def _parse_datetime(raw: Any) -> datetime.datetime | None:
         try:
             dt = datetime.datetime.strptime(raw, fmt)
             if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=datetime.timezone.utc)
+                dt = dt.replace(tzinfo=datetime.UTC)
             return dt
         except ValueError:
             continue
@@ -82,9 +82,7 @@ class RAGFilter(BaseModel):
             return False
         if not self._check_path_glob(chunk):
             return False
-        if not self._check_frontmatter_match(chunk):
-            return False
-        return True
+        return self._check_frontmatter_match(chunk)
 
     def _check_categories(self, chunk: Chunk) -> bool:
         if self.categories is None:
@@ -113,7 +111,7 @@ class RAGFilter(BaseModel):
             return False
         threshold = self.min_last_updated
         if threshold.tzinfo is None:
-            threshold = threshold.replace(tzinfo=datetime.timezone.utc)
+            threshold = threshold.replace(tzinfo=datetime.UTC)
         return chunk_dt >= threshold
 
     def _check_path_glob(self, chunk: Chunk) -> bool:

@@ -5,14 +5,12 @@ the appropriate tier and model, then delegating to the LiteLLMAdapter.
 
 import logging
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel
 
-from deeprak.delegate.classifier import TaskClassifier
-from deeprak.delegate.classifier import TaskType
-from deeprak.delegate.tiers import ModelTier
-from deeprak.delegate.tiers import TierConfig
+from deeprak.delegate.classifier import TaskClassifier, TaskType
+from deeprak.delegate.tiers import ModelTier, TierConfig
 
 if TYPE_CHECKING:
     from deeprak.delegate.litellm_adapter import LiteLLMAdapter
@@ -106,7 +104,7 @@ def _extract_response_fields(
         content = str(content)
 
     usage_obj = raw.get("usage", {})
-    usage: dict[str, object] = usage_obj if isinstance(usage_obj, dict) else {}
+    usage: dict[str, Any] = usage_obj if isinstance(usage_obj, dict) else {}
 
     prompt_tokens = int(usage.get("prompt_tokens", 0) or 0)
     completion_tokens = int(usage.get("completion_tokens", 0) or 0)
@@ -156,9 +154,7 @@ class ModelRouter:
             raise ValueError(f"tier_configs is missing required tiers: {names}")
 
         if adapter is None:
-            raise ValueError(
-                "adapter is required. Provide a configured LiteLLMAdapter instance."
-            )
+            raise ValueError("adapter is required. Provide a configured LiteLLMAdapter instance.")
 
         self._tier_configs = tier_configs
         self._classifier = classifier if classifier is not None else TaskClassifier()
@@ -178,8 +174,8 @@ class ModelRouter:
             RuntimeError: If all models for the selected tier fail.
             ValueError:   If the adapter returns an unexpected response shape.
         """
-        task_type, tier, tier_config, max_tokens, temperature, messages = (
-            self._resolve_request(request)
+        task_type, tier, tier_config, max_tokens, temperature, messages = self._resolve_request(
+            request
         )
 
         models = [tier_config.primary_model(), *tier_config.fallback_models()]
@@ -195,9 +191,7 @@ class ModelRouter:
                     temperature=temperature,
                 )
                 latency_ms = int((time.monotonic() - start) * 1000)
-                return _extract_response_fields(
-                    raw, model, tier, task_type, latency_ms, attempt
-                )
+                return _extract_response_fields(raw, model, tier, task_type, latency_ms, attempt)
             except Exception as exc:
                 if self._is_retryable(exc):
                     _log.error(
@@ -211,9 +205,7 @@ class ModelRouter:
                     continue
                 raise
 
-        raise RuntimeError(
-            f"All {len(models)} model(s) for tier {tier} failed."
-        ) from last_exc
+        raise RuntimeError(f"All {len(models)} model(s) for tier {tier} failed.") from last_exc
 
     async def aroute(self, request: DelegateRequest) -> DelegateResponse:
         """
@@ -229,8 +221,8 @@ class ModelRouter:
             RuntimeError: If all models for the selected tier fail.
             ValueError:   If the adapter returns an unexpected response shape.
         """
-        task_type, tier, tier_config, max_tokens, temperature, messages = (
-            self._resolve_request(request)
+        task_type, tier, tier_config, max_tokens, temperature, messages = self._resolve_request(
+            request
         )
 
         models = [tier_config.primary_model(), *tier_config.fallback_models()]
@@ -246,9 +238,7 @@ class ModelRouter:
                     temperature=temperature,
                 )
                 latency_ms = int((time.monotonic() - start) * 1000)
-                return _extract_response_fields(
-                    raw, model, tier, task_type, latency_ms, attempt
-                )
+                return _extract_response_fields(raw, model, tier, task_type, latency_ms, attempt)
             except Exception as exc:
                 if self._is_retryable(exc):
                     _log.error(
@@ -262,9 +252,7 @@ class ModelRouter:
                     continue
                 raise
 
-        raise RuntimeError(
-            f"All {len(models)} model(s) for tier {tier} failed."
-        ) from last_exc
+        raise RuntimeError(f"All {len(models)} model(s) for tier {tier} failed.") from last_exc
 
     def _resolve_request(
         self,

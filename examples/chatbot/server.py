@@ -10,7 +10,6 @@ See ADR-005 in docs/design-decisions/ for the architectural rationale.
 
 from __future__ import annotations
 
-import asyncio
 import json
 import os
 import time
@@ -21,16 +20,11 @@ import httpx
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from deeprak.delegate import LiteLLMAdapter
-from deeprak.delegate import ModelTier
-from deeprak.delegate import TaskClassifier
-from deeprak.delegate import TaskType
-from deeprak.delegate import TierConfig
+from deeprak.delegate import LiteLLMAdapter, ModelTier, TaskClassifier, TaskType, TierConfig
 
 
 def _split_models(env_var: str) -> list[str]:

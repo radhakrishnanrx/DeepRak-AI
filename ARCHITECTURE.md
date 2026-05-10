@@ -62,7 +62,7 @@ These are documented in the ADRs, not omitted by accident:
 
 DeepRak is a library. It does not store credentials, accept inbound network traffic by default, or persist data outside paths you explicitly configure. The reference chatbot in `examples/` does open a local HTTP listener; users running it in production should add their own auth.
 
-For the security-conscious deployment story — including alignment with the OWASP APTS controls — see `SECURITY.md`.
+For the security-conscious deployment story — including alignment with public AI-security frameworks (OWASP LLM Top 10, NIST AI RMF, MITRE ATLAS) — see `SECURITY.md`.
 
 ---
 

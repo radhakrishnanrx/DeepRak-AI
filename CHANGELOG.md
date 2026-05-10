@@ -32,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - ADR-002: No UI in v0.1
   - ADR-003: LiteLLM as the model gateway
   - ADR-004: Grep over embeddings at small scale
-- Continuous integration: lint (ruff), type check (mypy --strict), tests (pytest, ≥70% coverage), anonymization gate.
+- Continuous integration: lint (ruff), type check (mypy --strict), tests (pytest, ≥70% coverage).
 - MIT License.
 
 ### Notes

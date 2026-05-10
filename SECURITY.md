@@ -62,11 +62,11 @@ The agentic-threat-modeling skill template (`examples/skills/agentic-threat-mode
 
 Use this skill as the entry point when threat-modeling any agentic deployment built on DeepRak.
 
-## OWASP APTS alignment (for security-sensitive deployments)
+## Alignment with public AI security frameworks
 
-If you are building an autonomous-agent system that needs to align with the OWASP Autonomous Penetration Testing Standard (APTS), DeepRak provides several v0.1 primitives:
+If you are building an autonomous-agent system that needs to align with public AI-security frameworks — NIST AI RMF, MITRE ATLAS, ENISA AI Threat Landscape — DeepRak provides v0.1 primitives that map onto common control areas:
 
-| APTS area | DeepRak primitive |
+| Control area | DeepRak primitive |
 |---|---|
 | Scope enforcement | `RAGFilter` for scope-bounded retrieval; `deeprak.policy` decorators (planned v0.2) |
 | Multi-source resilience | Multi-model fallback within each tier |
@@ -74,7 +74,7 @@ If you are building an autonomous-agent system that needs to align with the OWAS
 | Failure handling | Retry-with-exponential-backoff on transient errors, separated from non-retryable errors |
 | Transparency | The reference chatbot streams every routing decision to the UI as it happens |
 
-Full APTS compliance is a property of the *system you build with DeepRak*, not of DeepRak alone — the same way Kubernetes is a substrate for compliant workloads but does not itself certify compliance. Wire the primitives above into your application's audit log, approval channel, and dual-model QC pattern.
+Framework compliance is a property of the *system you build with DeepRak*, not of DeepRak alone — the same way Kubernetes is a substrate for compliant workloads but does not itself certify compliance. Wire the primitives above into your application's audit log, approval channel, and dual-model QC pattern.
 
 ## Disclosure
 

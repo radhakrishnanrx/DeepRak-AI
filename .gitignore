@@ -127,6 +127,18 @@ TODO.local.md
 *.draft.md
 local/
 
+# Sensitivity-gate scaffolding (maintainer-private — NEVER commit).
+# These files contain or implement private content-leak detection rules
+# specific to the maintainer's environment. They have no place in the
+# public repo.
+.sensitivity-patterns.local
+*.sensitivity-patterns.local
+scripts/sensitivity_check.sh
+.github/workflows/anonymization.yml
+.banned-tokens.local
+.private-tokens
+.private-tokens.local
+
 # Build artifacts / OS / editor swap files
 *.log
 *.pid

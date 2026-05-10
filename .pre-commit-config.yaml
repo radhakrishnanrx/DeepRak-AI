@@ -27,12 +27,3 @@ repos:
           - types-requests
         args: ["--strict", "--ignore-missing-imports"]
         files: ^deeprak/
-
-  - repo: local
-    hooks:
-      - id: anonymization-gate
-        name: Anonymization Gate (banned-token check)
-        entry: bash -c 'BANNED="\b([REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED])\b"; REPO_NAMES="[REDACTED]|[REDACTED]|[REDACTED]|[REDACTED]"; if grep -rPi --include="*.md" --include="*.py" --include="*.toml" --include="*.yml" --include="*.yaml" --include="*.html" --exclude=".pre-commit-config.yaml" --exclude="anonymization.yml" "$BANNED" .; then echo "Banned token detected (word-boundary)."; exit 1; fi; if grep -rEi --include="*.md" --include="*.py" --include="*.toml" --include="*.yml" --include="*.yaml" --include="*.html" --exclude=".pre-commit-config.yaml" --exclude="anonymization.yml" "($REPO_NAMES)" .; then echo "Internal repo/project name leak."; exit 1; fi; MAX_HITS=$(grep -rP --include="*.md" --include="*.py" --include="*.html" --exclude=".pre-commit-config.yaml" --exclude="anonymization.yml" "\bMax\b" . | grep -v "max_tokens\|maximum\|maxlength\|max length" || true); if [ -n "$MAX_HITS" ]; then echo "Possible Max brand reference: $MAX_HITS"; exit 1; fi; echo "Anonymization gate passed."'
-        language: system
-        pass_filenames: false
-        always_run: true

@@ -26,7 +26,7 @@ uv run pytest                  # confirm tests pass on your machine before chang
 2. Make the change. Keep commits focused.
 3. Run `uv run ruff check . && uv run ruff format . && uv run mypy deeprak && uv run pytest` locally.
 4. Push and open a PR. Reference the issue if one exists.
-5. CI runs lint, type check, tests across Python 3.11 / 3.12 / 3.13, and the anonymization gate. All four must pass.
+5. CI runs lint, type check, and tests across Python 3.11 / 3.12 / 3.13. All three must pass.
 
 ## Scope
 

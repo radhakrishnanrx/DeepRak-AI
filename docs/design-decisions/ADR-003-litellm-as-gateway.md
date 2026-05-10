@@ -56,7 +56,7 @@ The LiteLLM dependency is **not** a hard runtime dependency of DeepRak. DeepRak 
 
 ## Validation
 
-The maintainer's daily workflow runs through a LiteLLM proxy serving 10 distinct model IDs. The proxy has handled 5,000+ requests across the last 60 days with no provider-specific failure attributable to the gateway. The OpenAI-compatible wire format has proven sufficient for all delegation patterns DeepRak v0.1 needs.
+A reference daily workflow has been running through a LiteLLM proxy with multiple model IDs across providers for 6+ months. The OpenAI-compatible wire format has proven sufficient for all delegation patterns DeepRak v0.1 needs, and provider SDK churn has been absorbed by the gateway rather than by application code.
 
 ## Revisit Trigger
 

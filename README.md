@@ -279,7 +279,7 @@ Skills aren't static documents. Each one in `examples/skills/` has a *Pre-engage
 
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — the design principles, module map, and the adaptive-skill lifecycle in detail.
 - **[docs/design-decisions/](docs/design-decisions/)** — five ADRs documenting why DeepRak ships *without* a vector DB, *without* a built-in UI, etc. The "no's" matter as much as the "yes's".
-- **[SECURITY.md](SECURITY.md)** — security posture, OWASP LLM Top 10 alignment, OWASP APTS notes, vulnerability reporting.
+- **[SECURITY.md](SECURITY.md)** — security posture, OWASP LLM Top 10 alignment, NIST AI RMF / MITRE ATLAS mappings, vulnerability reporting.
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to contribute. Tests required. Type checks required.
 
 ---

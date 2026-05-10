@@ -49,7 +49,7 @@ A vector backend may be added in v0.2 **behind an opt-in flag**, never as the de
 
 ## Validation
 
-The maintainer's personal AI workflow system (the source pattern that motivated DeepRak) operates on roughly 90 markdown files — 41 memory entries and 49 skill playbooks — using grep-based search. In production-like daily use over 6+ months, grep retrieval has produced fewer false-positive retrievals and faster answers than the same corpus indexed in a small Chroma instance. Concrete benchmark to be published in `docs/architecture/rag.md` in a future release.
+A reference Markdown corpus of ~100 documents has been operated against grep-based retrieval for 6+ months in a daily workflow. Observed: fewer false-positive top-3 retrievals than the same corpus indexed in a small Chroma instance, and lower p95 latency. A formal benchmark with public corpora is planned for `docs/architecture/rag.md` in a future release.
 
 ## Revisit Trigger
 

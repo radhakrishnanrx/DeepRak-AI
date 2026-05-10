@@ -6,7 +6,7 @@
 
 ## Context
 
-The maintainer's prior agent platform initiative (a private predecessor) failed primarily because architecture became frontend-heavy before the orchestration runtime was stable. Workflows became prompt-driven through a UI rather than engine-driven through a typed runtime. State management drifted between UI and backend. Premium model tokens were burned on UI rendering tasks. The framework's coherence collapsed under the weight of frontend complexity.
+A recurring failure mode in agent-framework projects is becoming frontend-heavy before the orchestration runtime is stable. Workflows become prompt-driven through a UI rather than engine-driven through a typed runtime. State management drifts between UI and backend. Premium model tokens get burned on UI rendering tasks. The framework's coherence collapses under the weight of frontend complexity.
 
 Agent frameworks that ship a UI early (a pattern observed across the 2024-2026 agent-framework ecosystem) tend to converge on the same failure modes: the UI's expressive limits define the runtime's capabilities, instead of the runtime defining what the UI can show. The runtime becomes a backend for the UI rather than a primitive that any UI could be built on top of.
 

@@ -55,7 +55,7 @@ A future vector backend (v0.2+) will implement the same interface, so users can 
 
 ## Validation
 
-A benchmark comparing grep-based retrieval against a baseline vector retrieval (Chroma + `text-embedding-3-small`) on the maintainer's 41-file markdown corpus is planned for `docs/architecture/rag.md`. Preliminary observations from 6 months of daily use:
+A benchmark comparing grep-based retrieval against a baseline vector retrieval (Chroma + `text-embedding-3-small`) on a small Markdown corpus is planned for `docs/architecture/rag.md`. Preliminary observations from 6 months of daily use on a ~100-file reference corpus:
 
 - Grep-based retrieval has produced fewer false-positive top-3 results than Chroma on the same corpus.
 - Grep-based retrieval p95 latency is approximately 30ms; Chroma p95 with the same corpus indexed is approximately 220ms (mostly embedding-API call).

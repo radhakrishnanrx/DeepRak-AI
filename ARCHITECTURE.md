@@ -21,12 +21,14 @@ This document is intentionally short. The detailed reasoning lives in `docs/desi
 
 | Module | Status in v0.1 | What it does |
 |---|---|---|
-| `deeprak.delegate` | ✅ Implemented | Tier-aware model routing across SMALL / STANDARD / PREMIUM. LiteLLM-compatible HTTP adapter. Multi-model fallback. Sync + async. |
+| `deeprak.delegate` | ✅ Implemented | Tier-aware model routing across SMALL / STANDARD / PREMIUM. OpenAI-compat HTTP adapter (configurable path for non-canonical providers like Gemini direct). Multi-model fallback. Sync + async. |
 | `deeprak.rag` | ✅ Implemented | Heading-aware Markdown chunker + grep-based retrieval with frontmatter filters. No vector DB. |
-| `deeprak.context` | 🚧 Planned (v0.2) | Token counting + summarize-to-budget compression. |
-| `deeprak.memory` | 🚧 Planned (v0.2) | Append-only Markdown + JSON memory store. |
-| `deeprak.orchestrator` | 🚧 Planned (v0.2) | Workflow → Step → StepResult engine with retry policies. |
-| `deeprak.policy` | 🚧 Planned (v0.2) | Composable gate decorators (operator approval, scope, rate limit). |
+| `deeprak.enhance` | ✅ Implemented | `PromptEnhancer` — converts a vague pentest prompt into a structured plan (intent, target, engagement type, phases, recommended skills, safety gates) via a premium-tier model. |
+| `deeprak.orchestrator` | ✅ Implemented | Minimal sequential `Workflow` runner. Typed `Step` → `StepResult` with success/error capture and halt-on-failure. |
+| `deeprak.audit` | ✅ Implemented | Append-only JSONL audit log with SHA-256 hash chain. Supports OWASP APTS / NIST AI RMF audit-trail requirements. |
+| `deeprak.context` | 🚧 Planned (v0.3) | Token counting + summarize-to-budget compression. |
+| `deeprak.memory` | 🚧 Planned (v0.3) | Append-only Markdown + JSON memory store. |
+| `deeprak.policy` | 🚧 Planned (v0.3) | Composable gate decorators (operator approval, scope, rate limit). |
 
 The v0.2 modules ship as typed interfaces in v0.1; their implementations land alongside their tests in v0.2.
 

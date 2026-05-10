@@ -77,6 +77,21 @@ export DEEPRAK_MODEL_STANDARD="gpt-4o"
 export DEEPRAK_MODEL_PREMIUM="gpt-4o"
 ```
 
+### Google Gemini direct (no proxy needed)
+
+Gemini exposes an OpenAI-compatible endpoint at a non-default path, so set
+`DEEPRAK_GATEWAY_PATH` accordingly. Get a key at
+[aistudio.google.com/apikey](https://aistudio.google.com/apikey).
+
+```bash
+export DEEPRAK_GATEWAY_URL="https://generativelanguage.googleapis.com"
+export DEEPRAK_GATEWAY_PATH="/v1beta/openai/chat/completions"
+export DEEPRAK_API_KEY="<gemini-api-key>"
+export DEEPRAK_MODEL_SMALL="gemini-2.5-flash-lite"
+export DEEPRAK_MODEL_STANDARD="gemini-2.5-flash"
+export DEEPRAK_MODEL_PREMIUM="gemini-2.5-pro"
+```
+
 ### Ollama (local, no API key required)
 
 ```bash
@@ -138,6 +153,7 @@ FastAPI (server.py)
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `DEEPRAK_GATEWAY_URL` | yes | — | OpenAI-compatible base URL |
+| `DEEPRAK_GATEWAY_PATH` | no | `/v1/chat/completions` | Override for providers that expose OpenAI-compat at a non-default path (e.g. Gemini direct) |
 | `DEEPRAK_API_KEY` | yes | — | Bearer token for the gateway |
 | `DEEPRAK_MODEL_SMALL` | yes | — | Comma-separated model IDs for SMALL tier |
 | `DEEPRAK_MODEL_STANDARD` | yes | — | Comma-separated model IDs for STANDARD tier |

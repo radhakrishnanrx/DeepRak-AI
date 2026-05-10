@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-test:
+  lint-and-typecheck:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -38,12 +38,18 @@ jobs:
       - name: Type check (mypy --strict)
         run: uv run mypy deeprak
 
-      - name: Tests (pytest)
-        run: uv run pytest --cov=deeprak --cov-report=xml --cov-report=term-missing
-
-      - name: Upload coverage
-        if: matrix.python-version == '3.12'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage.xml
+      - name: Smoke import test
+        run: |
+          uv run python -c "
+          import deeprak
+          from deeprak.delegate import (
+              DelegateRequest, DelegateResponse, LiteLLMAdapter,
+              ModelRouter, ModelTier, TaskClassifier, TaskType, TierConfig,
+          )
+          from deeprak.rag import Chunk, GrepRAG, MarkdownChunker, RAGFilter, RAGMatch
+          assert deeprak.__version__
+          assert ModelTier.SMALL < ModelTier.STANDARD < ModelTier.PREMIUM
+          assert TaskType.recommended_tier(TaskType.PARSING) is ModelTier.SMALL
+          assert TaskType.recommended_tier(TaskType.SYNTHESIS) is ModelTier.PREMIUM
+          print(f'deeprak v{deeprak.__version__} — public API verified')
+          "

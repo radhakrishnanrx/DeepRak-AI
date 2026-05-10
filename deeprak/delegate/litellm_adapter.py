@@ -13,7 +13,7 @@ from pydantic import BaseModel, field_validator
 
 _log = logging.getLogger(__name__)
 
-_CHAT_COMPLETIONS_PATH: Final[str] = "/v1/chat/completions"
+_DEFAULT_CHAT_COMPLETIONS_PATH: Final[str] = "/v1/chat/completions"
 _RETRYABLE_STATUS_CODES: Final[frozenset[int]] = frozenset({500, 502, 503, 504})
 _BACKOFF_BASE_S: Final[float] = 1.0
 
@@ -23,12 +23,20 @@ class _AdapterConfig(BaseModel):
 
     base_url: str
     api_key: str
+    chat_completions_path: str = _DEFAULT_CHAT_COMPLETIONS_PATH
     timeout_s: float = 60.0
     max_retries_per_model: int = 2
 
     @field_validator("base_url")
     @classmethod
     def _strip_trailing_slash(cls, v: str) -> str:
+        return v.rstrip("/")
+
+    @field_validator("chat_completions_path")
+    @classmethod
+    def _normalize_path(cls, v: str) -> str:
+        if not v.startswith("/"):
+            v = "/" + v
         return v.rstrip("/")
 
     @field_validator("timeout_s")
@@ -48,7 +56,13 @@ class _AdapterConfig(BaseModel):
 
 class LiteLLMAdapter:
     """
-    Thin HTTP adapter for OpenAI-compatible ``/v1/chat/completions`` endpoints.
+    Thin HTTP adapter for OpenAI-compatible chat-completion endpoints.
+
+    Defaults to the canonical ``/v1/chat/completions`` path used by OpenAI,
+    LiteLLM proxies, Azure OpenAI, Ollama, vLLM, etc. Override
+    ``chat_completions_path`` for providers that expose OpenAI-compat at a
+    non-standard path — e.g. Google Gemini direct
+    (``/v1beta/openai/chat/completions``).
 
     Handles authentication, retry-with-exponential-backoff on transient errors,
     and provides both synchronous and asynchronous call paths.
@@ -60,6 +74,10 @@ class LiteLLMAdapter:
         base_url:              Root URL of the gateway (e.g. ``"http://localhost:4000"``).
                                Trailing slashes are stripped automatically.
         api_key:               Bearer token sent in the ``Authorization`` header.
+        chat_completions_path: Path appended to ``base_url`` for chat-completion
+                               requests. Defaults to ``"/v1/chat/completions"``.
+                               Use ``"/v1beta/openai/chat/completions"`` for
+                               Google Gemini's direct OpenAI-compat endpoint.
         timeout_s:             Per-request timeout in seconds. Defaults to ``60.0``.
         max_retries_per_model: How many times to retry a single model on transient
                                errors before giving up. Defaults to ``2``.
@@ -72,12 +90,14 @@ class LiteLLMAdapter:
         self,
         base_url: str,
         api_key: str,
+        chat_completions_path: str = _DEFAULT_CHAT_COMPLETIONS_PATH,
         timeout_s: float = 60.0,
         max_retries_per_model: int = 2,
     ) -> None:
         self._cfg = _AdapterConfig(
             base_url=base_url,
             api_key=api_key,
+            chat_completions_path=chat_completions_path,
             timeout_s=timeout_s,
             max_retries_per_model=max_retries_per_model,
         )
@@ -112,7 +132,7 @@ class LiteLLMAdapter:
             httpx.TimeoutException: If the request times out on every attempt.
             httpx.ConnectError:     If the gateway is unreachable on every attempt.
         """
-        url = self._cfg.base_url + _CHAT_COMPLETIONS_PATH
+        url = self._cfg.base_url + self._cfg.chat_completions_path
         payload = self._build_payload(model, messages, max_tokens, temperature)
         headers = self._build_headers()
 
@@ -181,7 +201,7 @@ class LiteLLMAdapter:
             httpx.TimeoutException: If the request times out on every attempt.
             httpx.ConnectError:     If the gateway is unreachable on every attempt.
         """
-        url = self._cfg.base_url + _CHAT_COMPLETIONS_PATH
+        url = self._cfg.base_url + self._cfg.chat_completions_path
         payload = self._build_payload(model, messages, max_tokens, temperature)
         headers = self._build_headers()
 

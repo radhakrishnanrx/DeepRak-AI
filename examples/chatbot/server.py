@@ -44,6 +44,9 @@ def _require_env(name: str) -> str:
 
 GATEWAY_URL: str = _require_env("DEEPRAK_GATEWAY_URL")
 API_KEY: str = _require_env("DEEPRAK_API_KEY")
+# Optional: override for providers whose OpenAI-compat endpoint is at a
+# non-standard path (e.g. Gemini direct: /v1beta/openai/chat/completions).
+GATEWAY_PATH: str = os.environ.get("DEEPRAK_GATEWAY_PATH", "/v1/chat/completions")
 
 _MODELS_SMALL = _split_models("DEEPRAK_MODEL_SMALL")
 _MODELS_STANDARD = _split_models("DEEPRAK_MODEL_STANDARD")
@@ -66,7 +69,11 @@ HOST: str = os.environ.get("DEEPRAK_HOST", "127.0.0.1")
 PORT: int = int(os.environ.get("DEEPRAK_PORT", "8000"))
 
 classifier = TaskClassifier()
-adapter = LiteLLMAdapter(base_url=GATEWAY_URL, api_key=API_KEY)
+adapter = LiteLLMAdapter(
+    base_url=GATEWAY_URL,
+    api_key=API_KEY,
+    chat_completions_path=GATEWAY_PATH,
+)
 
 app = FastAPI(title="DeepRak Chatbot Example")
 

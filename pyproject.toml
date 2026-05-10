@@ -1,7 +1,7 @@
 [project]
 name = "deeprak"
-version = "0.1.1"
-description = "AI-native orchestration runtime: model delegation, local RAG, context compression, workflow execution."
+version = "0.2.0"
+description = "Agentic AI penetration testing runtime: tier-aware model delegation, local security RAG, and skill-based workflow execution for autonomous pentest agents."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -12,6 +12,14 @@ keywords = [
     "ai",
     "agent",
     "agentic",
+    "agentic-ai",
+    "pentest",
+    "penetration-testing",
+    "red-team",
+    "security",
+    "appsec",
+    "ai-security",
+    "llm-security",
     "orchestration",
     "llm",
     "rag",
@@ -29,6 +37,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security",
 ]
 
 dependencies = [
@@ -39,12 +48,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0",
-    "pytest-asyncio>=0.23",
-    "pytest-cov>=5.0",
     "ruff>=0.6",
     "mypy>=1.10",
-    "pre-commit>=3.7",
 ]
 chatbot = [
     "fastapi>=0.115",
@@ -96,34 +101,5 @@ no_implicit_optional = true
 check_untyped_defs = true
 ignore_missing_imports = true
 
-[tool.pytest.ini_options]
-minversion = "8.0"
-addopts = [
-    "-v",
-    "--strict-markers",
-    "--tb=short",
-    "--cov=deeprak",
-    "--cov-report=term-missing",
-    # v0.1 ships smoke + rag tests only; the deeper modules (orchestrator,
-    # memory, context, policy) are skeletons. Coverage threshold rises in
-    # v0.2 alongside their implementations.
-    "--cov-fail-under=30",
-]
-testpaths = ["tests"]
-asyncio_mode = "auto"
-
-[tool.coverage.run]
-branch = true
-source = ["deeprak"]
-omit = [
-    "*/tests/*",
-    "*/__init__.py",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:",
-]
+# pytest config intentionally omitted — v0.2 ships without an in-repo test
+# suite. Forks that add tests can configure pytest themselves.

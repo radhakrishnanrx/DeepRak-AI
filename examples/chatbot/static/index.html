@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeepRak — Orchestration-Visible Chat</title>
+
+  <style>
+    :root {
+      --bg-page:        #0f1117;
+      --bg-panel:       #1a1d27;
+      --bg-bubble-user: #1e2235;
+      --bg-bubble-ai:   #161922;
+      --bg-input:       #1e2235;
+      --bg-timeline:    #13161f;
+      --border:         #2a2d3e;
+      --border-focus:   #4f5a8a;
+      --text-primary:   #e8eaf0;
+      --text-secondary: #8b90a8;
+      --text-muted:     #555a72;
+      --accent-blue:    #3b82f6;
+      --accent-purple:  #8b5cf6;
+      --accent-green:   #22c55e;
+      --tier-small:     #888;
+      --tier-standard:  #3b82f6;
+      --tier-premium:   #8b5cf6;
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  14px;
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-panel);
+      flex-shrink: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+    header h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+    header h1 span { color: var(--accent-purple); }
+    header p { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
+
+    main { display: flex; flex: 1; overflow: hidden; }
+
+    #conversation-col {
+      flex: 0 0 60%;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .bubble-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .bubble-wrap.user { align-items: flex-end; }
+    .bubble-wrap.ai   { align-items: flex-start; }
+
+    .bubble {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: var(--radius-lg);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .bubble.user { background: var(--bg-bubble-user); border: 1px solid var(--border); }
+    .bubble.ai   { background: var(--bg-bubble-ai);   border: 1px solid var(--border); }
+    .bubble.error {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+    }
+
+    .meta-row { display: flex; flex-wrap: wrap; gap: 6px; padding-left: 4px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+    .badge.tier-small    { background: rgba(136,136,136,0.12); color: var(--tier-small);    border-color: rgba(136,136,136,0.25); }
+    .badge.tier-standard { background: rgba(59,130,246,0.12);  color: var(--tier-standard); border-color: rgba(59,130,246,0.25); }
+    .badge.tier-premium  { background: rgba(139,92,246,0.12);  color: var(--tier-premium);  border-color: rgba(139,92,246,0.25); }
+    .badge.model   { background: rgba(255,255,255,0.04); color: var(--text-secondary); border-color: var(--border); }
+    .badge.latency { background: rgba(34,197,94,0.08);   color: #4ade80;               border-color: rgba(34,197,94,0.2); }
+    .badge.tokens  { background: rgba(249,115,22,0.08);  color: #fb923c;               border-color: rgba(249,115,22,0.2); }
+    .badge.attempt { background: rgba(239,68,68,0.08);   color: #f87171;               border-color: rgba(239,68,68,0.2); }
+
+    #input-row {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-panel);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    #message-input {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      padding: 10px 14px;
+      resize: none;
+      min-height: 44px;
+      max-height: 140px;
+      outline: none;
+      transition: border-color 0.15s;
+      line-height: 1.5;
+    }
+    #message-input:focus { border-color: var(--border-focus); }
+    #message-input::placeholder { color: var(--text-muted); }
+    #tier-select {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-family: var(--font);
+      font-size: 0.8rem;
+      padding: 0 10px;
+      height: 44px;
+      outline: none;
+      cursor: pointer;
+    }
+    #tier-select:focus { border-color: var(--border-focus); }
+    #send-btn {
+      background: var(--accent-purple);
+      border: none;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0 20px;
+      height: 44px;
+      cursor: pointer;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    #send-btn:hover:not(:disabled) { background: #7c3aed; }
+    #send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #timeline-col {
+      flex: 0 0 40%;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-timeline);
+      overflow: hidden;
+    }
+    #timeline-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #timeline-header::before {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+    }
+    #timeline-header.idle::before { background: var(--text-muted); box-shadow: none; }
+
+    #timeline {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #timeline-empty {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 40px;
+      font-style: italic;
+    }
+
+    .tl-entry {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      opacity: 0;
+      transform: translateX(12px);
+      animation: tl-arrive 0.2s ease forwards;
+    }
+    @keyframes tl-arrive { to { opacity: 1; transform: translateX(0); } }
+
+    .tl-top { display: flex; align-items: center; gap: 8px; }
+    .tl-ts { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); }
+    .tl-name { font-size: 0.75rem; font-weight: 600; padding: 1px 7px; border-radius: 4px; }
+    .tl-name.classifier      { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .tl-name.tier_selected   { background: rgba(139,92,246,0.15); color: #a78bfa; }
+    .tl-name.model_call_start{ background: rgba(34,197,94,0.12);  color: #4ade80; }
+    .tl-name.model_call_done { background: rgba(34,197,94,0.2);   color: #86efac; }
+    .tl-name.fallback_used   { background: rgba(239,68,68,0.15);  color: #f87171; }
+    .tl-name.default         { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+
+    .tl-detail {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      white-space: pre;
+      overflow-x: auto;
+      padding: 4px 6px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+      line-height: 1.5;
+    }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border-focus); }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Deep<span>Rak</span> — Orchestration-Visible Chat</h1>
+    <p>watch your agent think, not just talk</p>
+  </header>
+
+  <main>
+    <section id="conversation-col">
+      <div id="messages">
+        <div id="messages-empty" style="color:var(--text-muted);font-size:0.85rem;text-align:center;margin-top:40px;font-style:italic;">
+          Send a message to begin. The orchestration timeline will appear on the right.
+        </div>
+      </div>
+
+      <div id="input-row">
+        <textarea id="message-input" rows="1" placeholder="Ask anything..." autocomplete="off" spellcheck="true"></textarea>
+        <select id="tier-select" title="Tier override">
+          <option value="">auto</option>
+          <option value="small">small</option>
+          <option value="standard">standard</option>
+          <option value="premium">premium</option>
+        </select>
+        <button id="send-btn">Send</button>
+      </div>
+    </section>
+
+    <section id="timeline-col">
+      <div id="timeline-header" class="idle">Orchestration Timeline</div>
+      <div id="timeline">
+        <div id="timeline-empty">Events will appear here as DeepRak routes your request.</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const messagesEl    = document.getElementById("messages");
+    const messagesEmpty = document.getElementById("messages-empty");
+    const inputEl       = document.getElementById("message-input");
+    const tierEl        = document.getElementById("tier-select");
+    const sendBtn       = document.getElementById("send-btn");
+    const timelineEl    = document.getElementById("timeline");
+    const timelineEmpty = document.getElementById("timeline-empty");
+    const timelineHdr   = document.getElementById("timeline-header");
+
+    inputEl.addEventListener("input", () => {
+      inputEl.style.height = "auto";
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + "px";
+    });
+
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendBtn.click();
+      }
+    });
+
+    function clearTimeline() {
+      timelineEl.innerHTML = "";
+      timelineEmpty.style.display = "block";
+      timelineEl.appendChild(timelineEmpty);
+      timelineHdr.className = "";
+    }
+
+    function appendTimelineEntry(name, detail) {
+      if (timelineEmpty.parentNode) timelineEmpty.remove();
+      const ts = new Date().toLocaleTimeString("en-US", {
+        hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit",
+        fractionalSecondDigits: 3,
+      });
+      const entry = document.createElement("div");
+      entry.className = "tl-entry";
+
+      const top = document.createElement("div");
+      top.className = "tl-top";
+
+      const tsEl = document.createElement("span");
+      tsEl.className = "tl-ts";
+      tsEl.textContent = ts;
+
+      const nameEl = document.createElement("span");
+      const known = ["classifier","tier_selected","model_call_start","model_call_done","fallback_used"];
+      nameEl.className = "tl-name " + (known.includes(name) ? name : "default");
+      nameEl.textContent = name;
+
+      top.appendChild(tsEl);
+      top.appendChild(nameEl);
+
+      const detailEl = document.createElement("div");
+      detailEl.className = "tl-detail";
+      detailEl.textContent = JSON.stringify(detail, null, 2);
+
+      entry.appendChild(top);
+      entry.appendChild(detailEl);
+      timelineEl.appendChild(entry);
+      timelineEl.scrollTop = timelineEl.scrollHeight;
+    }
+
+    function appendUserBubble(text) {
+      if (messagesEmpty.parentNode) messagesEmpty.remove();
+      const wrap = document.createElement("div");
+      wrap.className = "bubble-wrap user";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble user";
+      bubble.textContent = text;
+      wrap.appendChild(bubble);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function makeBadge(cls, text) {
+      const b = document.createElement("span");
+      b.className = "badge " + cls;
+      b.textContent = text;
+      return b;
+    }
+
+    function appendAIBubble(data) {
+      const wrap = document.createElement("div");
+      wrap.className = "bubble-wrap ai";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble ai";
+      bubble.textContent = data.content;
+
+      const meta = document.createElement("div");
+      meta.className = "meta-row";
+
+      const tierName = (data.tier || "").toLowerCase();
+      meta.appendChild(makeBadge("tier-" + tierName, tierName.toUpperCase()));
+      meta.appendChild(makeBadge("model",   "model: " + (data.model || "unknown")));
+      meta.appendChild(makeBadge("latency", data.latency_ms + " ms"));
+      meta.appendChild(makeBadge("tokens",  ((data.prompt_tokens || 0) + (data.completion_tokens || 0)) + " tok"));
+      if (data.attempts > 1) {
+        meta.appendChild(makeBadge("attempt", data.attempts + " attempts"));
+      }
+
+      wrap.appendChild(bubble);
+      wrap.appendChild(meta);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function appendErrorBubble(message) {
+      const wrap = document.createElement("div");
+      wrap.className = "bubble-wrap ai";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble error";
+      bubble.textContent = "[error] " + message;
+      wrap.appendChild(bubble);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function streamChat(message, tierOverride) {
+      sendBtn.disabled = true;
+      timelineHdr.className = "";
+
+      clearTimeline();
+      appendUserBubble(message);
+
+      let buffer = "";
+      try {
+        const resp = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message, tier_override: tierOverride || null }),
+        });
+
+        if (!resp.ok) {
+          appendErrorBubble("HTTP " + resp.status + ": " + resp.statusText);
+          return;
+        }
+
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          const frames = buffer.split("\n\n");
+          buffer = frames.pop();
+
+          for (const frame of frames) {
+            const line = frame.trim();
+            if (!line.startsWith("data:")) continue;
+            const jsonStr = line.slice("data:".length).trim();
+            let event;
+            try { event = JSON.parse(jsonStr); } catch { continue; }
+
+            if (event.type === "step") {
+              appendTimelineEntry(event.name, event.detail);
+            } else if (event.type === "response") {
+              appendAIBubble(event);
+            } else if (event.type === "error") {
+              appendErrorBubble(event.message);
+            }
+          }
+        }
+      } catch (err) {
+        appendErrorBubble("Network error: " + err.message);
+      } finally {
+        sendBtn.disabled = false;
+        timelineHdr.className = "idle";
+        inputEl.focus();
+      }
+    }
+
+    sendBtn.addEventListener("click", () => {
+      const message = inputEl.value.trim();
+      if (!message) return;
+      inputEl.value = "";
+      inputEl.style.height = "auto";
+      streamChat(message, tierEl.value);
+    });
+  </script>
+</body>
+</html>

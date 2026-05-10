@@ -1,0 +1,144 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# uv / poetry
+.uv/
+.pdm-python
+.pdm.toml
+poetry.lock
+
+# Testing / coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Environment / secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+*.csr
+*.jks
+*.keystore
+*.token
+*.secret
+secrets.json
+secrets.yaml
+credentials.json
+credentials.yaml
+auth.json
+auth.yaml
+api_keys.*
+api-keys.*
+# SSH key files (any) — never commit even by accident
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+known_hosts
+authorized_keys
+# Cloud-provider credential locations
+.aws/
+.azure/
+.gcp/
+.gcloud/
+service-account*.json
+gcp-credentials*.json
+# LLM / model gateway local configs (frequently contain API keys)
+litellm_config.yaml
+litellm_config.yml
+litellm.yaml
+.litellm/
+# Database / persisted state files
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+
+# Local notes / scratch (gitignored — workspace-local only)
+.scratch/
+NOTES.local.md
+TODO.local.md
+*.local.md
+*.draft.md
+local/
+
+# Build artifacts / OS / editor swap files
+*.log
+*.pid
+*.sock
+*.bak
+*.swp
+*.swo
+*~
+.~lock.*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

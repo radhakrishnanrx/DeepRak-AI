@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-05-10
+
+### Added
+- README "Commercial use" section: explicit statement that MIT permits unrestricted commercial use; optional commercial extensions are tracked separately from this OSS runtime.
+- README brand notice in the License section: clarifies that the *DeepRak* name and any future hosted products are separate from this MIT-licensed runtime.
+
+### Notes
+- No code changes. No API changes. v0.2.0 source-compatible. The runtime stays pure MIT.
+
 ## [0.2.0] — 2026-05-10
 
 ### Repositioning

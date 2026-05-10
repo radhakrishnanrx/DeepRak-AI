@@ -192,6 +192,14 @@ When you build something useful on top, open an issue or a Discussion — the ma
 
 ---
 
+## Commercial use
+
+DeepRak's MIT license permits unrestricted commercial use — vendor it, ship it inside a paid product, run it inside a managed service. No royalties, no notification needed.
+
+Optional commercial extensions (advanced multi-agent orchestration, deeper integration adapters, curated security knowledge corpora, managed hosting) are tracked separately from this OSS runtime. The public runtime stays MIT. If your team needs something the OSS doesn't yet provide, [open an issue](https://github.com/radhakrishnanrx/DeepRak-AI/issues) — feature requests inform the roadmap.
+
 ## License
 
 [MIT](LICENSE) — fork it, ship it, attribution appreciated.
+
+> **Brand notice**: *DeepRak* is a name held by the maintainer. The runtime, documentation, and ADRs in this repository are open-source under MIT. Commercial extensions, training corpora, and the *DeepRak* brand for hosted products are separate from this open-source project.

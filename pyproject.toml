@@ -1,6 +1,6 @@
 [project]
 name = "deeprak"
-version = "0.2.0"
+version = "0.2.1"
 description = "Agentic AI penetration testing runtime: tier-aware model delegation, local security RAG, and skill-based workflow execution for autonomous pentest agents."
 readme = "README.md"
 requires-python = ">=3.11"
